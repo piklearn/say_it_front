@@ -1,13 +1,13 @@
 import { useState } from 'react'
-import ChatRoom from './chatCompponents/ChatRoom';
+import ChatPage from './ChatPage';
 
 function App() {
 
-  return (
-    <>
-    <ChatRoom/>
-    </>
-  )
+    return (
+        <>
+            <ChatPage />
+        </>
+    )
 }
 
 export default App
