@@ -7,17 +7,15 @@ function App() {
     const baseUrl = import.meta.env.VITE_BASE_URL || "ws://localhost:8000/ws";
     const { isLoading, setIsLoading } = useState(true);
     const { userId, status, chatLog, sendMessage } = useChatSocket(baseUrl + '/ws', setIsLoading);
-    
+
     return (
         <>
-            {!isLoading ? (<ChatPage
+            <ChatPage
                 name={userId}
                 chatLog={chatLog}
                 sendMessage={sendMessage}
                 status={status}
-            />) : (<Loading
-                status={status}
-            />)}
+            />
         </>
     )
 }

@@ -1,14 +1,13 @@
-
-export default function Loading() {
-    return (
-        <div>
-            <div
-                className="inline-block h-8 w-8 animate-[spinner-grow_0.75s_linear_infinite] rounded-full bg-current align-[-0.125em] text-primary opacity-0 motion-reduce:animate-[spinner-grow_1.5s_linear_infinite]"
-                role="status">
-                <span
-                    className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-                >در انتظار کاربر</span>
+export default function Loading({status}) {
+  return (
+     <div className={`fixed bg-gray-500 w-dvw h-dvh opacity-60 ${status === "matched" | "disconnected" ? "hidden" : ""}`}>
+            <div className='relative top-1/2 left-1/2 -translate-1/2 shadow-md p-5 rounded-md bg-amber-50 w-1/3 h-1/3 overflow-x-hidden'>
+                <div
+                    className="flex text-amber-200 mx-auto h-20 w-20 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    role="status">
+                </div>
+                <h1 className="text-amber-400 text-center">{status}</h1>
             </div>
         </div>
-    );
+  );
 }
