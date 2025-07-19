@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function useChatSocket(url, setIsLoading) {
+export default function useChatSocket(url) {
   const ws = useRef(null);
   const [status, setStatus] = useState("connecting"); // connecting | waiting | matched | disconnected
-  const [userId, setUserId] = useState(); 
+  const [userId, setUserId] = useState();
+  const [partnerId, setPartnerId] = useState();
   const [chatLog, setChatLog] = useState([]);
 
   useEffect(() => {
@@ -14,20 +15,30 @@ export default function useChatSocket(url, setIsLoading) {
     };
 
     ws.current.onmessage = (event) => {
-      const msg = event.data;
-      if (msg.startsWith("SET_ID:")) {
-        setUserId(msg.split(":")[1]);
-        localStorage.setItem("user_id", msg.split(":")[1]);
-      } else if (msg === "WAITING") {
+      const msg = JSON.parse(event.data);
+
+      if (msg["status"] === "accept_connect") {
+        setUserId(msg["payload"]["user_id"]);
+        localStorage.setItem("user_id", msg["payload"]["user_id"]);
+
+      } else if (msg["status"] === "waiting") {
         setStatus("waiting");
-      } else if (msg === "MATCHED") {
+
+      } else if (msg["status"] === "matched") {
         setStatus("matched");
-        setIsLoading(false);
-      } else if (msg === "PARTNER_DISCONNECTED") {
+        setPartnerId(msg["payload"]["partner_id"])
+
+      } else if (msg["status"] === "partner_disconnected") {
         setStatus("disconnected");
-        alert("طرف مقابل قطع شد" );
-      } else {
-        setChatLog((prev) => [...prev, { from: "partner", text: msg }]);
+        alert("مخاطب قطع شد");
+
+      } else if (msg["status"] === "receive_message"){      
+        console.log(msg);
+          
+        setChatLog((prev) => [...prev, { from: "partner", text: msg["payload"]["content"] }]);
+      }
+      else {
+        console.log(msg)
       }
     };
 
@@ -47,5 +58,5 @@ export default function useChatSocket(url, setIsLoading) {
     }
   };
 
-  return { userId, status, chatLog, sendMessage };
+  return { partnerId, userId, status, chatLog, sendMessage };
 }
