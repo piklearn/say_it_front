@@ -11,13 +11,26 @@ export default function useChatSocket(url) {
     ws.current = new WebSocket(url);
 
     ws.current.onopen = () => {
+      const id = localStorage.getItem('user_id');
+      if (id) {
+        ws.current.send(JSON.stringify({
+          "status": "request_continue_chat",
+          "payload": {
+            "user_id": id
+          }
+        }))
+      } else {
+        ws.current.send(JSON.stringify({
+          "status": "new id"
+        }))
+      }
       setStatus("connecting");
     };
 
     ws.current.onmessage = (event) => {
       const msg = JSON.parse(event.data);
 
-      if (msg["status"] === "accept_connect") {
+      if (msg["status"] === "new id") {
         setUserId(msg["payload"]["user_id"]);
         localStorage.setItem("user_id", msg["payload"]["user_id"]);
 
@@ -32,9 +45,9 @@ export default function useChatSocket(url) {
         setStatus("disconnected");
         alert("مخاطب قطع شد");
 
-      } else if (msg["status"] === "receive_message"){      
+      } else if (msg["status"] === "receive_message") {
         console.log(msg);
-          
+
         setChatLog((prev) => [...prev, { from: "partner", text: msg["payload"]["content"] }]);
       }
       else {
