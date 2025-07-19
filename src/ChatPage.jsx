@@ -28,7 +28,7 @@ const ChatPage = ({ name,
     }, [chatLog])
     return (<>
         <Loading status={status} />
-        <div className="flex flex-col h-dvh w-dvw bg-white shadow-xl rounded-lg">
+        <div className="flex flex-col h-dvh lg:w-3/5 md:w-dvw bg-white shadow-xl rounded-lg mx-auto">
             {/* هدر چت روم */}
             <ChatHeader name={name} status={status} />
 

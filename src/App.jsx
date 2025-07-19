@@ -4,13 +4,12 @@ import useChatSocket from './hooks/useChatSocket';
 import "./App.css"
 function App() {
     const baseUrl = import.meta.env.VITE_BASE_URL || "ws://localhost:8000/ws";
-    const { isLoading, setIsLoading } = useState(true);
-    const { userId, status, chatLog, sendMessage } = useChatSocket(baseUrl + '/ws', setIsLoading);
+    const { partnerId, userId, status, chatLog, sendMessage } = useChatSocket(baseUrl + '/ws');
 
     return (
         <>
             <ChatPage
-                name={userId}
+                name={partnerId}
                 chatLog={chatLog}
                 sendMessage={sendMessage}
                 status={status}
